@@ -7,7 +7,7 @@
   <style>
     * { box-sizing: border-box; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; }
     body { margin: 0; background: #f1f5f9; color: #1e293b; padding: 24px 14px; }
-    .container { max-width: 840px; margin: 0 auto; background: #ffffff; border-radius: 16px; padding: 28px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08); }
+    .container { max-width: 860px; margin: 0 auto; background: #ffffff; border-radius: 16px; padding: 28px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08); }
     header { border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
     .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
     .badge { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
@@ -25,8 +25,7 @@
     .section-sub { font-size: 12px; font-weight: 500; color: #64748b; }
 
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    @media (max-width: 640px) { .grid, .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
 
     .field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #334155; }
     .field label span { font-weight: 500; color: #64748b; font-size: 12px; }
@@ -50,10 +49,13 @@
     .result-box { display: none; margin-top: 22px; border-radius: 14px; padding: 22px; border: 1.5px solid #cbd5e1; background: #f8fafc; }
     .result-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; margin-bottom: 16px; }
     .score { font-size: 32px; font-weight: 800; color: #0f172a; }
-    .stage-pill { padding: 7px 15px; border-radius: 999px; font-size: 14px; font-weight: 800; }
+    .stage-pill { padding: 7px 15px; border-radius: 999px; font-size: 14px; font-weight: 800; display: inline-block; }
+    .stage-pill-sm { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; display: inline-block; }
     .stage-low { background: #e2e8f0; color: #334155; }
     .stage-mid { background: #fef3c7; color: #b45309; }
     .stage-high { background: #fee2e2; color: #b91c1c; }
+
+    .weekly-alert { display: none; background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; padding: 11px 14px; border-radius: 9px; margin-bottom: 14px; font-size: 13.5px; font-weight: 700; line-height: 1.5; }
 
     .save-banner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 10px 14px; border-radius: 9px; margin-bottom: 14px; font-size: 13px; color: #065f46; }
     .save-btn { background: #059669; color: #fff; border: none; padding: 6px 12px; border-radius: 7px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
@@ -66,8 +68,15 @@
     .policy-card .p-val { font-size: 15px; font-weight: 800; color: #1e3a8a; }
 
     .guide-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
-    .guide-title { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+    .guide-title { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
     ul.guide-list { margin: 0; padding-left: 18px; font-size: 14px; color: #334155; line-height: 1.65; }
+
+    .table-wrap { overflow-x: auto; margin-top: 8px; }
+    table.forecast-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
+    table.forecast-table th { background: #f1f5f9; color: #334155; font-weight: 700; padding: 9px 8px; border-bottom: 1.5px solid #cbd5e1; white-space: nowrap; }
+    table.forecast-table td { padding: 9px 8px; border-bottom: 1px solid #e2e8f0; color: #1e293b; white-space: nowrap; }
+    table.forecast-table td.action-col { text-align: left; white-space: normal; min-width: 190px; }
+    table.forecast-table tr.today-row { background: #eff6ff; font-weight: 700; }
 
     .ethics-box { background: #f1f5f9; border-left: 4px solid #0284c7; padding: 12px 14px; border-radius: 8px; font-size: 12.5px; color: #334155; line-height: 1.6; }
     .ethics-box strong { color: #0369a1; }
@@ -78,22 +87,22 @@
     <header>
       <div class="badge-row">
         <span class="badge">제주 방역업체 전용 의사결정 지원</span>
-        <span class="badge badge-green">기상 자동 연동 · 제주 감시단계 환산 · 딥러닝(MLP)</span>
+        <span class="badge badge-green">7일 주간 기상 예보 연동 · 제주 감시단계 환산 · 딥러닝(MLP)</span>
       </div>
-      <h1>제주 지역 맞춤형 AI 모기 활동 예측 및 방역 준비 안내 서비스</h1>
-      <p class="sub">제주의 기상 데이터와 제주도 보건환경연구원 감시 기준을 연동해 모기 활동 수준을 예측하고, 방역업체의 약제 준비 시점과 물량·인력 배치 방침을 안내합니다.</p>
+      <h1>제주 지역 맞춤형 AI 모기 활동 예측 및 주간 방역 준비 안내 서비스</h1>
+      <p class="sub">제주의 7일 기상 예보와 제주도 보건환경연구원 감시 기준을 연동해 오늘부터 일주일 뒤까지의 모기 활동 흐름을 예측하고, 방역업체의 선제적 약제 발주·인력 배치 방침을 안내합니다.</p>
     </header>
 
     <div class="auto-bar">
-      <div class="auto-status" id="weatherStatus">⏳ 제주 기상 관측 데이터를 자동으로 불러오는 중...</div>
-      <button type="button" class="auto-btn" onclick="fetchJejuWeather()">기상 데이터 새로고침</button>
+      <div class="auto-status" id="weatherStatus">⏳ 제주 7일 기상 예보 데이터를 자동으로 불러오는 중...</div>
+      <button type="button" class="auto-btn" onclick="fetchJejuWeather()">기상 예보 새로고침</button>
     </div>
 
-    <!-- 1. 기상 데이터 자동 입력 영역 -->
+    <!-- 1. 당일 기상 데이터 자동 입력 영역 -->
     <div class="section-box">
       <div class="section-title">
-        <span>1. 제주 기상 관측 데이터 (자동 연동 · 시뮬레이션 수정 가능)</span>
-        <span class="section-sub">관측 지점 선택 시 일최고·최저기온, 강수량 자동 입력</span>
+        <span>1. 제주 기상 관측·예보 데이터 (자동 연동 · 시뮬레이션 수정 가능)</span>
+        <span class="section-sub">관측 지점 선택 시 오늘 기온·강수량 및 향후 7일 예보 자동 반영</span>
       </div>
       <div class="grid" style="margin-bottom: 12px;">
         <div class="field">
@@ -106,17 +115,17 @@
           </select>
         </div>
         <div class="field">
-          <label for="rain">일강수량 (mm) <span>(습기·고인 물 환경 요인)</span></label>
+          <label for="rain">오늘 일강수량 (mm) <span>(습기·고인 물 환경 요인)</span></label>
           <input type="number" id="rain" step="0.1" min="0" value="2.5" />
         </div>
       </div>
       <div class="grid">
         <div class="field">
-          <label for="maxTemp">일최고기온 (℃)</label>
+          <label for="maxTemp">오늘 일최고기온 (℃)</label>
           <input type="number" id="maxTemp" step="0.1" value="22.4" />
         </div>
         <div class="field">
-          <label for="minTemp">일최저기온 (℃)</label>
+          <label for="minTemp">오늘 일최저기온 (℃)</label>
           <input type="number" id="minTemp" step="0.1" value="15.8" />
         </div>
       </div>
@@ -149,7 +158,7 @@
     </div>
 
     <div class="actions">
-      <button type="button" class="btn-primary" onclick="predictMosquito()">방역업체 약제·인력 준비 수준 예측하기</button>
+      <button type="button" class="btn-primary" onclick="predictMosquito()">오늘 및 일주일(7일) 방역 준비 수준 예측하기</button>
       <button type="button" class="btn-reset" onclick="resetForm()">입력 초기화</button>
     </div>
 
@@ -158,11 +167,13 @@
     <div id="resultBox" class="result-box">
       <div class="result-header">
         <div>
-          <div style="font-size:13px; color:#64748b; font-weight:700;" id="resultRegionLabel">예측 결과</div>
-          <div class="score"><span id="predScore">0.0</span> <span style="font-size:15px; font-weight:600; color:#475569;">(예측 모기지수)</span></div>
+          <div style="font-size:13px; color:#64748b; font-weight:700;" id="resultRegionLabel">오늘 예측 결과</div>
+          <div class="score"><span id="predScore">0.0</span> <span style="font-size:15px; font-weight:600; color:#475569;">(오늘 예상 모기지수)</span></div>
         </div>
         <span id="stageBadge" class="stage-pill stage-low">낮음</span>
       </div>
+
+      <div id="weeklyAlertBanner" class="weekly-alert"></div>
 
       <div class="save-banner">
         <span id="saveBannerText">내일 예측 시 오늘 산출된 지수(<strong>0.0</strong>)를 ‘전일 모기지수’로 이어서 사용할 수 있습니다.</span>
@@ -189,6 +200,28 @@
         <ul class="guide-list" id="guideList"></ul>
       </div>
 
+      <div class="guide-box">
+        <div class="guide-title">
+          <span>⑤ 향후 일주일(7일) 모기 활동 추이 및 주간 방역 계획표</span>
+          <span style="font-size:11.5px; font-weight:500; color:#64748b;">1~3일 차: 즉시 방역·발주 / 4~7일 차: 주간 일정 참고용</span>
+        </div>
+        <div class="table-wrap">
+          <table class="forecast-table">
+            <thead>
+              <tr>
+                <th>일자</th>
+                <th>예보 기온(평균)</th>
+                <th>강수량</th>
+                <th>예측 지수</th>
+                <th>활동 단계</th>
+                <th>주간 방역 준비 조치</th>
+              </tr>
+            </thead>
+            <tbody id="forecast7Body"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="ethics-box" id="ethicsNotice"></div>
     </div>
   </div>
@@ -196,30 +229,76 @@
   <script>
     const STORAGE_KEY = "jeju_mosquito_saved_pred";
     let latestPredValue = null;
+    let forecast7Days = [];
+
+    function getFallbackDates() {
+      const list = [];
+      const base = new Date();
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(base);
+        d.setDate(base.getDate() + i);
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        list.push(`${d.getFullYear()}-${mm}-${dd}`);
+      }
+      return list;
+    }
 
     const STATIONS = {
       jeju: {
         name: "제주시 (북부 관측소)",
         lat: 33.5141, lon: 126.5297,
-        fallback: { maxT: 22.4, minT: 15.8, rain: 2.5 },
-        biasNote: "제주시 도심 관측 지점 기준 (예상 평균 오차 ±4.09 이내 · 해안·도심 밀집 지역 적합)"
+        fallbackWeather: [
+          { maxT: 22.4, minT: 15.8, rain: 2.5 },
+          { maxT: 23.1, minT: 16.5, rain: 0.0 },
+          { maxT: 24.0, minT: 17.2, rain: 12.0 },
+          { maxT: 23.5, minT: 16.8, rain: 0.0 },
+          { maxT: 22.8, minT: 16.0, rain: 0.0 },
+          { maxT: 21.5, minT: 14.9, rain: 0.0 },
+          { maxT: 21.0, minT: 14.2, rain: 1.5 }
+        ],
+        biasNote: "제주시 도심 관측 지점 기준 (당일 예상 평균 오차 ±4.09 이내 · 해안·도심 밀집 지역 적합)"
       },
       seogwipo: {
         name: "서귀포시 (남부 관측소)",
         lat: 33.2462, lon: 126.5653,
-        fallback: { maxT: 23.8, minT: 17.2, rain: 4.0 },
+        fallbackWeather: [
+          { maxT: 23.8, minT: 17.2, rain: 4.0 },
+          { maxT: 24.4, minT: 17.8, rain: 0.0 },
+          { maxT: 25.1, minT: 18.4, rain: 15.0 },
+          { maxT: 24.6, minT: 17.9, rain: 0.0 },
+          { maxT: 23.9, minT: 17.1, rain: 0.0 },
+          { maxT: 23.0, minT: 16.4, rain: 2.0 },
+          { maxT: 22.5, minT: 15.9, rain: 0.0 }
+        ],
         biasNote: "서귀포시 남부 관측 지점 기준 (온난·다습 기후로 감시 지점 이격 지역은 ±4.5 내외 편차 가능)"
       },
       seongsan: {
         name: "성산 (동부 관측소)",
         lat: 33.3868, lon: 126.8802,
-        fallback: { maxT: 21.9, minT: 15.1, rain: 3.0 },
+        fallbackWeather: [
+          { maxT: 21.9, minT: 15.1, rain: 3.0 },
+          { maxT: 22.6, minT: 15.8, rain: 0.0 },
+          { maxT: 23.4, minT: 16.5, rain: 10.5 },
+          { maxT: 22.8, minT: 16.0, rain: 0.0 },
+          { maxT: 22.0, minT: 15.2, rain: 0.0 },
+          { maxT: 21.1, minT: 14.5, rain: 1.0 },
+          { maxT: 20.6, minT: 14.0, rain: 0.0 }
+        ],
         biasNote: "동부 해안·습지 인접 관측 지점 기준 (관측소 외곽 농경·습지대는 국지적 편차 ±4.8 고려 필요)"
       },
       gosan: {
         name: "고산 (서부 관측소)",
         lat: 33.2938, lon: 126.1628,
-        fallback: { maxT: 21.2, minT: 16.0, rain: 1.5 },
+        fallbackWeather: [
+          { maxT: 21.2, minT: 16.0, rain: 1.5 },
+          { maxT: 21.8, minT: 16.4, rain: 0.0 },
+          { maxT: 22.5, minT: 17.0, rain: 8.0 },
+          { maxT: 22.0, minT: 16.5, rain: 0.0 },
+          { maxT: 21.4, minT: 15.9, rain: 0.0 },
+          { maxT: 20.5, minT: 15.1, rain: 0.0 },
+          { maxT: 20.1, minT: 14.8, rain: 1.0 }
+        ],
         biasNote: "서부 해안 관측 지점 기준 (해풍 영향이 큰 지역으로 도심 관측 기준 대비 ±4.6 편차 공개)"
       }
     };
@@ -235,6 +314,39 @@
     const B0 = [-1.3726, 7.6124, -1.0515, -0.8415, -1.1814, 2.1138];
     const W1 = [0.0001, 2.2049, 0.0002, 0.0, 0.0, 0.5434];
     const B1 = 6.5585;
+
+    function runMlpStep(avgTemp, rain, prev) {
+      const inputs = [avgTemp, rain, prev];
+      const scaled = inputs.map((val, i) => (val - SCALER_MEAN[i]) / SCALER_SCALE[i]);
+      let out = B1;
+      for (let j = 0; j < 6; j++) {
+        let sum = B0[j];
+        for (let i = 0; i < 3; i++) sum += scaled[i] * W0[i][j];
+        out += Math.max(0, sum) * W1[j];
+      }
+      return Math.max(0, Math.round(out * 10) / 10);
+    }
+
+    function getStageInfo(score) {
+      if (score >= 29.4) {
+        return {
+          stage: "높음",
+          badgeClass: "stage-high",
+          shortAction: "성충 집중 방제 · 약제 140% 이상 투입"
+        };
+      } else if (score >= 19.0) {
+        return {
+          stage: "보통",
+          badgeClass: "stage-mid",
+          shortAction: "유충(장구벌레) 선제 구제 · 약제 사전 발주"
+        };
+      }
+      return {
+        stage: "낮음",
+        badgeClass: "stage-low",
+        shortAction: "서식지 정기 점검 · 살충제 과다 살포 자제"
+      };
+    }
 
     function updateSavedStatus() {
       const savedRaw = localStorage.getItem(STORAGE_KEY);
@@ -282,141 +394,3 @@
       const key = document.getElementById("station").value;
       const st = STATIONS[key];
       const statusEl = document.getElementById("weatherStatus");
-      statusEl.textContent = `⏳ ${st.name} 기상 데이터를 불러오는 중...`;
-
-      document.getElementById("maxTemp").value = st.fallback.maxT;
-      document.getElementById("minTemp").value = st.fallback.minT;
-      document.getElementById("rain").value = st.fallback.rain;
-
-      try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${st.lat}&longitude=${st.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Asia%2FSeoul&forecast_days=1`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("API 응답 지연");
-        const data = await res.json();
-        const maxT = data.daily.temperature_2m_max[0];
-        const minT = data.daily.temperature_2m_min[0];
-        const rain = data.daily.precipitation_sum[0];
-        const dateStr = data.daily.time[0];
-
-        document.getElementById("maxTemp").value = maxT.toFixed(1);
-        document.getElementById("minTemp").value = minT.toFixed(1);
-        document.getElementById("rain").value = rain.toFixed(1);
-        statusEl.textContent = `✅ 기상 데이터 자동 입력 완료 (${st.name} · ${dateStr} 기준)`;
-      } catch (e) {
-        statusEl.textContent = `✅ ${st.name} 관측 기준 데이터 자동 적용됨 (직접 수정 가능)`;
-      }
-      predictMosquito();
-    }
-
-    function resetForm() {
-      ["prevIndex", "maxTemp", "minTemp", "rain"].forEach(id => document.getElementById(id).value = "");
-      document.getElementById("errorBox").style.display = "none";
-      document.getElementById("resultBox").style.display = "none";
-    }
-
-    function predictMosquito() {
-      const errorBox = document.getElementById("errorBox");
-      const resultBox = document.getElementById("resultBox");
-      errorBox.style.display = "none";
-
-      const key = document.getElementById("station").value;
-      const st = STATIONS[key];
-      const maxT = parseFloat(document.getElementById("maxTemp").value);
-      const minT = parseFloat(document.getElementById("minTemp").value);
-      const rain = parseFloat(document.getElementById("rain").value);
-      const prev = parseFloat(document.getElementById("prevIndex").value);
-
-      if ([maxT, minT, rain, prev].some(v => Number.isNaN(v))) {
-        errorBox.textContent = "입력 오류: 모든 기상 및 전일 모기지수 항목을 숫자로 입력해 주세요.";
-        errorBox.style.display = "block";
-        resultBox.style.display = "none";
-        return;
-      }
-      if (minT > maxT) {
-        errorBox.textContent = "입력 오류: 일최저기온은 일최고기온보다 높을 수 없습니다.";
-        errorBox.style.display = "block";
-        resultBox.style.display = "none";
-        return;
-      }
-      if (rain < 0 || prev < 0) {
-        errorBox.textContent = "입력 오류: 일강수량과 전일 모기지수는 0 이상의 값이어야 합니다.";
-        errorBox.style.display = "block";
-        resultBox.style.display = "none";
-        return;
-      }
-
-      const avgTemp = (maxT + minT) / 2;
-      const inputs = [avgTemp, rain, prev];
-      const scaled = inputs.map((val, i) => (val - SCALER_MEAN[i]) / SCALER_SCALE[i]);
-
-      let out = B1;
-      for (let j = 0; j < 6; j++) {
-        let sum = B0[j];
-        for (let i = 0; i < 3; i++) sum += scaled[i] * W0[i][j];
-        out += Math.max(0, sum) * W1[j];
-      }
-      const pred = Math.max(0, Math.round(out * 10) / 10);
-      latestPredValue = pred;
-
-      let stage = "낮음";
-      let badgeClass = "stage-low";
-      let timing = "정기 점검 주기 유지";
-      let volume = "평시 대비 70~80% (최소 비축)";
-      let staff = "상시 순찰 1개 조 운영";
-      let guides = [
-        "모기 활동이 낮은 단계입니다. 성충 살충제 대량 살포를 자제하여 약제 낭비와 환경 오염을 방지하세요.",
-        "하수구·물웅덩이 등 유충 서식지 사전 점검 위주로 방역 인력을 운용하세요.",
-        "강수 예보 시 고인 물 제거 안내를 거래처(숙박·상가·공동주택)에 사전 공지하세요."
-      ];
-
-      if (pred >= 29.4) {
-        stage = "높음";
-        badgeClass = "stage-high";
-        timing = "즉시 선제 발주 및 긴급 투입";
-        volume = "평시 대비 140~150% 집중 확보";
-        staff = "전담 방역조 증원 및 야간 교대 배치";
-        guides = [
-          "모기 활동이 급증하는 성수기 경보 단계입니다. 거래처 예약 증가에 대비해 살충·유충 구제 약제를 140% 이상 선제 확보하세요.",
-          "방역 인력을 권역별로 증원 배치하고, 특히 비 온 직후 습도가 높아진 주거지·숙박시설·하천 인근에 집중 방제를 실시하세요.",
-          "안전 기준에 따라 권장 희석 배수를 준수하고, 표적 구역 중심 정밀 방제로 불필요한 과다 살포를 방지하세요."
-        ];
-      } else if (pred >= 19.0) {
-        stage = "보통";
-        badgeClass = "stage-mid";
-        timing = "3~5일 전 사전 약제 발주";
-        volume = "평시 대비 110~120% 탄력 비축";
-        staff = "권역별 순회 방역조 정상 가동";
-        guides = [
-          "모기 개체수가 증가세로 전환되는 시점입니다. 성수기 진입에 대비해 약제 재고를 평시보다 10~20% 여유 있게 확보하세요.",
-          "강수 이후 습기와 고인 물이 형성된 구역에 유충 구제제를 우선 투입해 성충 대량 발생을 사전에 차단하세요.",
-          "주요 거래처의 정기 방역 일정을 앞당겨 조율하고 방역 장비를 사전 점검하세요."
-        ];
-      }
-
-      document.getElementById("resultRegionLabel").textContent = `${st.name} · 일평균기온 ${avgTemp.toFixed(1)}℃ / 강수량 ${rain.toFixed(1)}mm / 전일지수 ${prev.toFixed(1)} 반영`;
-      document.getElementById("predScore").textContent = pred.toFixed(1);
-      const badge = document.getElementById("stageBadge");
-      badge.textContent = `모기 활동 단계: ${stage}`;
-      badge.className = `stage-pill ${badgeClass}`;
-
-      document.getElementById("saveBannerText").innerHTML =
-        `내일 예측 시 오늘 산출된 지수(<strong>${pred.toFixed(1)}</strong>)를 ‘전일 모기지수’로 이어서 사용할 수 있습니다.`;
-
-      document.getElementById("policyTiming").textContent = timing;
-      document.getElementById("policyVolume").textContent = volume;
-      document.getElementById("policyStaff").textContent = staff;
-
-      document.getElementById("guideList").innerHTML = guides.map(g => `<li>${g}</li>`).join("");
-      document.getElementById("ethicsNotice").innerHTML =
-        `<strong>[AI 윤리 및 신뢰성 고지]</strong> ① <strong>안전성:</strong> 과대 예측에 의한 환경 오염을 줄이기 위해 검증 오차(MAE 4.09, 과대 예측 0.0%) 기준으로 보정되었으며, 최종 약제 투입량은 현장 점검 후 결정하는 참고 자료로 활용하세요. ② <strong>공정성:</strong> 소규모 방역업체도 비용 부담 없이 이용 가능한 무료 웹 서비스입니다. ③ <strong>알고리즘 편향 안내:</strong> ${st.biasNote}.`;
-
-      resultBox.style.display = "block";
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      updateSavedStatus();
-      fetchJejuWeather();
-    });
-  </script>
-</body>
-</html>
